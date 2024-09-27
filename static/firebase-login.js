@@ -1,17 +1,5 @@
 "use strict";
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-auth.js";
-
-const firebaseConfig = {
-    apiKey: "AIzaSyDZXMcVBF1oA7Bpvl3HgZBEo7kTMmumIYY",
-    authDomain: "ageless-airship-415814.firebaseapp.com",
-    projectId: "ageless-airship-415814",
-    storageBucket: "ageless-airship-415814.appspot.com",
-    messagingSenderId: "951253795299",
-    appId: "1:951253795299:web:5e30409d1d92022359a0d6",
-    measurementId: "G-VLNTN4K55W"
-};
 
 
 window.addEventListener("load", function(){
