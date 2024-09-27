@@ -1,0 +1,60 @@
+body{
+    padding: 2rem;
+}
+
+.flex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.form {
+    max-width: 18rem;
+    width: 100%;
+    padding-top: 5rem;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    gap: 1rem;
+}
+
+.inp {
+    padding: 10px;
+    padding-left: 16px;
+    padding-right: 16px;
+    border: solid 2px #252525;
+    border-radius: 9999px;
+    display: inline-block;
+}
+
+.w-full {
+    width: 100%;
+}
+
+.btn {
+    padding: 10px;
+    padding-left: 16px;
+    padding-right: 16px;
+    cursor: pointer;
+    background: #078bd2;
+    color: white;
+    font-weight: 600;
+    border: none;
+    border-radius: 999px;
+}
+
+.post-block {
+    padding: 2rem;
+    border-radius: 12px;
+    background-color: rgb(221, 221, 221);
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    max-width: 15rem;
+    width: 100%;
+    padding-top: 4rem;
+}
+
