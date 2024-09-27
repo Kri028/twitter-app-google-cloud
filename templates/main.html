@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/style.css') }}" />
+    <script type="module" src="{{ url_for('static', path='/firebase-login.js') }}"></script>
+    <style>
+        .search-box {
+            display: flex;
+            margin-top: 5rem;
+            gap: 1rem;
+        }
+        .user {
+            width: 20rem;
+            padding: 1rem;
+            border-radius: 10px;
+            border: 2px solid #b9b9b9;
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            margin-top: 2rem;
+            text-decoration: none;
+            color: #282828;
+        }
+        .user-logo {
+            height: 4rem;
+            width: 4rem;
+            border-radius: 9999px;
+            background-color: #078bd2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 800;
+            color: white;
+            flex-shrink: 0;
+        }
+        .tweetbox {
+            max-width: 44rem;
+            width: 100%;
+            padding-top: 3rem;
+        }
+        .user-tweet {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 10px;
+            border: 2px solid #b9b9b9;
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            margin-top: 2rem;
+            text-decoration: none;
+            color: #282828;
+        }
+        .delete-btn {
+            padding: 10px;
+            padding-left: 16px;
+            padding-right: 16px;
+            cursor: pointer;
+            background: #d20707;
+            color: white;
+            font-weight: 600;
+            border: none;
+            border-radius: 999px;
+        }
+        .edit-tweet {
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .edit-btn{
+            padding: 10px;
+            padding-left: 16px;
+            padding-right: 16px;
+            cursor: pointer;
+            background: #a8a8a8;
+            color: rgb(56, 56, 56);
+            font-weight: 600;
+            border: none;
+            border-radius: 999px;
+        }
+        .tweet-form{
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            padding: 1rem;
+            border-radius: 10px;
+            background: #e4e4e4;
+        }
+        .tweet-input{
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .image-input {
+            height: 6rem;
+            width: 8rem;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+        }
+        .upload-img{
+            height: 0;
+            width: 0;
+        }
+        .download-btn {
+            padding: 10px;
+            padding-left: 16px;
+            padding-right: 16px;
+            cursor: pointer;
+            background: #dcdcdc;
+            color: rgb(56, 56, 56);
+            font-weight: 600;
+            border: none;
+            border-radius: 999px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <div class="flex">
+            <div id="login-box" hidden="true">
+                <div class="form">
+                    <h2>Login to your account or Create a new account</h2>
+                    <input type="email" name="email" class="inp" id="email" placeholder="Your Email" />
+                    <input type="password" name="password" class="inp" id="password" placeholder="You Password" />
+                    <button id="login" class="btn w-full">Login</button>
+                    <button id="sign-up" class="btn w-full">Create Account</button>
+                </div>
+            </div>
+        </div>
+        <button id="sign-out" class="btn" hidden="true">Log Out</button>
+    </div>
+    {% if user_token %}
+        {% if not user_info.get('username') %}
+        <div class="flex">
+            <form action="/set-username" method="post" class="form">
+                <input type="text" name="username" class="inp" id="username" placeholder="Your username" />
+                <button class="btn" type="submit">Set UserName</button>
+            </form>
+        </div>
+        {% endif %}
+        {% if user_info.get('username') %}
+        <div class="flex">
+            <form class="tweet-form" action="/add-tweet" method="post" enctype="multipart/form-data">
+                <div class="tweet-input">
+                    <textarea class="inp" name="tweet" id="tweet" placeholder="Your tweet" maxlength="140"></textarea>
+                    <button class="btn" type="submit">Post Tweet</button>
+                </div>
+                <div class="image-input" >
+                    <label for="upload-img">Upload Image</label>
+                    <input class="upload-img" id="upload-img" type="file" name="filename" accept="image/jpeg, image/png" />
+                </div>
+            </form>
+        </div>
+        <div class="flex">
+            <form class="search-box" action="/find-user">
+                <input type="text" class="inp w-full" name="user_name" placeholder="write the username" />
+                <button class="btn">Search</button>
+            </form>
+        </div>
+            {% if accounts %}
+                {% for account in accounts %}
+                    <div class="flex">
+                        <a class="user" href="/account/{{ account['id'] }}" >
+                            <div class="user-logo" > User </div>
+                            <div>
+                                Username {{ account.to_dict().get('username') }}
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        <div class="flex">
+            <form class="search-box" action="/find-tweet">
+                <input type="text" class="inp w-full" name="tweet" placeholder="write the contents of tweet" />
+                <button class="btn">Search</button>
+            </form>
+        </div>
+        {% if tweets %}
+            {% for tweet in tweets %}
+                <div class="flex">
+                    <div class="user" >
+                        <div class="user-logo" > {{ tweet.get('username') }} </div>
+                        <div>
+                            <p>Tweet : {{ tweet.get('name') }}</p>
+                            <div>Date : {{ tweet.get('date') }}</div>
+                            {% if tweet.to_dict()['filename'] %}
+                                <form action="/download-file" method="post" >
+                                    <input type="hidden" value="{{ tweet.get('filename') }}" name="filename" />
+                                    <button class="download-btn" >File : {{ tweet.get('filename') }} </button>
+                                </form>
+                            {% endif %}
+                            {% if tweet.get('username')==user_info.get('username') %}
+                                <div class="edit-tweet">
+                                    <form action="/edit/{{ tweet['id'] }}" method="get" >
+                                        <button type="submit" class="edit-btn" >Edit</button>
+                                    </form>
+                                    <form method="get" action="/delete-tweet/{{ tweet['id'] }}" >
+                                        <button type="submit" class="delete-btn" >Delete</button>
+                                    </form>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+        <div class="flex">
+            <div class="tweetbox">
+                <h3>Timeline Tweets</h3>
+                {% for tweet in timeline_tweets %}
+                    <div class="user-tweet" >
+                        <div class="user-logo" > {{ tweet.get('username') }} </div>
+                        <div>
+                            <p>Tweet : {{ tweet.get('name') }}</p>
+                            <div>Date : {{ tweet.get('date') }}</div>
+                            {% if tweet.to_dict()['filename'] %}
+                                <form action="/download-file" method="post" >
+                                    <input type="hidden" value="{{ tweet.get('filename') }}" name="filename" />
+                                    <button class="download-btn" >File : {{ tweet.get('filename') }} </button>
+                                </form>
+                            {% endif %}
+                            {% if tweet.get('username')==user_info.get('username') %}
+                                <div class="edit-tweet">
+                                    <form action="/edit/{{ tweet['id'] }}" method="get" >
+                                        <button type="submit" class="edit-btn" >Edit</button>
+                                    </form>
+                                    <form method="get" action="/delete-tweet/{{ tweet['id'] }}" >
+                                        <button type="submit" class="delete-btn" >Delete</button>
+                                    </form>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    {% endif %}
+</body>
+
+</html>

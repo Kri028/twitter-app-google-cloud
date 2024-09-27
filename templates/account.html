@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/style.css') }}" />
+    <style>
+        *, body {
+            padding: 0;
+            margin: 0;
+        }
+        .header {
+            padding: 1rem;
+            padding-top: 2rem;
+            padding-bottom: 2rem;
+            background: #dadada;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .header-inset{
+            max-width: 44rem;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 6rem;
+        }
+        .logo {
+            height: 8rem;
+            width: 8rem;
+            border-radius: 9999px;
+            background-color: #078bd2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 800;
+            color: white;
+            flex-shrink: 0;
+        }
+        .unfollow-btn{
+            padding: 10px;
+            padding-left: 16px;
+            padding-right: 16px;
+            cursor: pointer;
+            background: #d20707;
+            color: white;
+            font-weight: 600;
+            border: none;
+            border-radius: 999px;
+        }
+        .tweetbox {
+            max-width: 44rem;
+            width: 100%;
+            padding-top: 3rem;
+        }
+        .user {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 10px;
+            border: 2px solid #b9b9b9;
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            margin-top: 2rem;
+            text-decoration: none;
+            color: #282828;
+        }
+        .user-logo {
+            height: 4rem;
+            width: 4rem;
+            border-radius: 9999px;
+            background-color: #078bd2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 800;
+            color: white;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-inset">
+            <div class="logo">
+                {{ user.get('username') }}
+            </div>
+            <div>
+                {% if following %}
+                    <form action="/unfollow/{{ user['id'] }}" method="get" >
+                        <button class="unfollow-btn" >Unfollow</button>
+                    </form>
+                {% endif %}
+                {% if not following %}
+                    <form action="/follow/{{ user['id'] }}" method="get">
+                        <button class="btn" >Follow</button>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="flex">
+        <div class="tweetbox">
+            <h3>Tweets</h3>
+            {% for tweet in tweets %}
+                <div class="user" >
+                    <div class="user-logo" > {{ tweet.get('username') }} </div>
+                    <div>
+                        <p>Tweet : {{ tweet.get('name') }}</p>
+                        <div>Date : {{ tweet.get('date') }}</div>
+                        {% if tweet.to_dict()['filename'] %}
+                                <form action="/download-file" method="post" >
+                                    <input type="hidden" value="{{ tweet.get('filename') }}" name="filename" />
+                                    <button class="download-btn" >File : {{ tweet.get('filename') }} </button>
+                                </form>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

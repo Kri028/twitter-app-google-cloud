@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/style.css') }}" />
+    <style>
+        body{
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            margin: 0;
+        }
+        .tweet-form{
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            padding: 1rem;
+            border-radius: 10px;
+            background: #e4e4e4;
+        }
+        .tweet-input{
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .image-input {
+            height: 6rem;
+            width: 8rem;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+        }
+        .upload-img{
+            height: 0;
+            width: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="flex">
+        <form class="tweet-form" action="/update-tweet/{{ tweet['id'] }}" method="post" enctype="multipart/form-data">
+            <div class="tweet-input">
+                <textarea class="inp" name="tweet" id="tweet" placeholder="Your tweet" maxlength="140">{{ tweet.get('name') }}</textarea>
+                <button class="btn" type="submit">Edit Tweet</button>
+            </div>
+            {% if tweet.to_dict()['filename'] %}
+                <div class="image-input" >
+                    <label for="upload-img">Change Image</label>
+                    <input class="upload-img" id="upload-img" type="file" name="filename" accept="image/jpeg, image/png" />
+                </div>
+            {% endif %}
+        </form>
+    </div>
+</body>
+</html>
